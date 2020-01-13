@@ -12,28 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/*absolute position landmarks*/
 #include "mediapipe/calculators/tflite/tflite_tensors_to_landmarks_calculator.pb.h"
 #include "mediapipe/framework/calculator_framework.h"
 #include "mediapipe/framework/formats/landmark.pb.h"
 #include "mediapipe/framework/port/ret_check.h"
 #include "tensorflow/lite/interpreter.h"
-#include "mediapipe/framework/port/status.h"
-#include "mediapipe/framework/tool/status_util.h"
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
 using namespace std;
 
+//Edit your mediapipe code because of using input_path&output_path 
 extern string input_video_new;
 extern string output_video_new;
-static bool cpos=false;
-static vector<pair<float,float>> landpos(21);
+
+
 namespace mediapipe {
 
 // A calculator for converting TFLite tensors from regression models into
-// landmarks.
+// landmarks. Note that if the landmarks in the tensor has more than 3
+// dimensions, only the first 3 dimensions will be converted to x,y,z.
 //
 // Input:
 //  TENSORS - Vector of TfLiteTensor of type kTfLiteFloat32. Only the first
@@ -87,11 +86,11 @@ REGISTER_CALCULATOR(TfLiteTensorsToLandmarksCalculator);
   }
 
   if (cc->Outputs().HasTag("LANDMARKS")) {
-    cc->Outputs().Tag("LANDMARKS").Set<std::vector<Landmark>>();
+    cc->Outputs().Tag("LANDMARKS").Set<LandmarkList>();
   }
 
   if (cc->Outputs().HasTag("NORM_LANDMARKS")) {
-    cc->Outputs().Tag("NORM_LANDMARKS").Set<std::vector<NormalizedLandmark>>();
+    cc->Outputs().Tag("NORM_LANDMARKS").Set<NormalizedLandmarkList>();
   }
 
   return ::mediapipe::OkStatus();
@@ -120,7 +119,6 @@ REGISTER_CALCULATOR(TfLiteTensorsToLandmarksCalculator);
 
 ::mediapipe::Status TfLiteTensorsToLandmarksCalculator::Process(
     CalculatorContext* cc) {
-  static int idx=0;
   if (cc->Inputs().Tag("TENSORS").IsEmpty()) {
     return ::mediapipe::OkStatus();
   }
@@ -135,99 +133,100 @@ REGISTER_CALCULATOR(TfLiteTensorsToLandmarksCalculator);
     num_values *= raw_tensor->dims->data[i];
   }
   const int num_dimensions = num_values / num_landmarks_;
-  // Landmarks must have less than 3 dimensions. Otherwise please consider
-  // using matrix.
-  CHECK_LE(num_dimensions, 3);
   CHECK_GT(num_dimensions, 0);
 
   const float* raw_landmarks = raw_tensor->data.f;
 
-  auto output_landmarks = absl::make_unique<std::vector<Landmark>>();
+  LandmarkList output_landmarks;
 
   for (int ld = 0; ld < num_landmarks_; ++ld) {
     const int offset = ld * num_dimensions;
-    Landmark landmark;
+    Landmark* landmark = output_landmarks.add_landmark();
 
     if (options_.flip_horizontally()) {
-      landmark.set_x(options_.input_image_width() - raw_landmarks[offset]);
+      landmark->set_x(options_.input_image_width() - raw_landmarks[offset]);
     } else {
-      landmark.set_x(raw_landmarks[offset]);
+      landmark->set_x(raw_landmarks[offset]);
     }
     if (num_dimensions > 1) {
       if (options_.flip_vertically()) {
-        landmark.set_y(options_.input_image_height() -
-                       raw_landmarks[offset + 1]);
+        landmark->set_y(options_.input_image_height() -
+                        raw_landmarks[offset + 1]);
       } else {
-        landmark.set_y(raw_landmarks[offset + 1]);
+        landmark->set_y(raw_landmarks[offset + 1]);
       }
     }
     if (num_dimensions > 2) {
-      landmark.set_z(raw_landmarks[offset + 2]);
+      landmark->set_z(raw_landmarks[offset + 2]);
     }
-    output_landmarks->push_back(landmark);
   }
-  //
-  
+
   // Output normalized landmarks if required.
   if (cc->Outputs().HasTag("NORM_LANDMARKS")) {
-    auto output_norm_landmarks =
-        absl::make_unique<std::vector<NormalizedLandmark>>();
-    //추가한 부분
-    //비디오 이름만 빼오기
+    NormalizedLandmarkList output_norm_landmarks;
+    // for (const auto& landmark : output_landmarks) {
+    
+    //Edit your code
+    //To get video name from input_file path
     string video_fname="";
     bool isTrue=false;
-    int slx=0;
-
+    int slx;
+    //To locate the video file name in the input path
     for(slx=input_video_new.size()-1;input_video_new[slx]!='/';slx--){
-   	if(isTrue){
-	   video_fname=input_video_new[slx]+video_fname;
-	}
-	if(input_video_new[slx]=='.') isTrue=true;
+        if(isTrue)
+            video_fname=input_video_new[slx]+video_fname;
+        if(input_video_new[slx]=='.') isTrue=true;
     }
     slx--;
-    string dir_name="/";//비디오 디렉토리 빼기:
+    //To get directory name that store text file from input_file path
+    string dir_name="/";      
     for(;input_video_new[slx]!='/';slx--){
-    	dir_name=input_video_new[slx]+dir_name;
+        dir_name=input_video_new[slx]+dir_name;
     }
-    string output_path_cp="";//아웃풋 파일의 경로의 일부를 저장하는 변수
+    //아웃풋 파일의 경로의 일부를 저장하는 변수
+    //parameter that store a part of output_file path
+    string output_path_cp="";
     int j=0;
     for (;output_video_new[j]!='=';j++);
     j++;
     for(;output_video_new[j]!='_';j++){
-  	output_path_cp.push_back(output_video_new[j]);
+        output_path_cp.push_back(output_video_new[j]);
     }
+    //output file path 
     string str=output_path_cp+dir_name+video_fname+".txt";
+      
+    //output file open
     ofstream out(str,std::ios_base::out | std::ios_base::app);
-    int i=0;	
-    for (const auto& landmark : *output_landmarks) {
-      NormalizedLandmark norm_landmark;
-      norm_landmark.set_x(static_cast<float>(landmark.x()) /
-                          options_.input_image_width());
-      norm_landmark.set_y(static_cast<float>(landmark.y()) /
-                          options_.input_image_height());
-      norm_landmark.set_z(landmark.z() / options_.normalize_z());
-      //if(cpos){
-      out<<static_cast<float>(landmark.x()) / options_.input_image_width()<<" ";
-      out<<static_cast<float>(landmark.y()) / options_.input_image_height()<<" ";
-      //}
-      //landpos[i]=make_pair(static_cast<float>(landmark.x())/options_.input_image_width(),
-		//tatic_cast<float>(landmark.y())/options_.input_image_height());
-      i=i+1;
-      output_norm_landmarks->push_back(norm_landmark);
+
+    for (int i = 0; i < output_landmarks.landmark_size(); ++i) {
+      const Landmark& landmark = output_landmarks.landmark(i);
+      NormalizedLandmark* norm_landmark = output_norm_landmarks.add_landmark();
+      norm_landmark->set_x(static_cast<float>(landmark.x()) /
+                           options_.input_image_width());
+      norm_landmark->set_y(static_cast<float>(landmark.y()) /
+                           options_.input_image_height());
+      norm_landmark->set_z(landmark.z() / options_.normalize_z());
+      
+      
+      out<<(static_cast<float>(landmark.x()) / options_.input_image_width())<<" ";
+      out<<(static_cast<float>(landmark.y()) / options_.input_image_height())<<" ";
+
     }
-    cpos=true;
-    idx++;
     out.close();
-    //추가한 부분 끝
+    //
+    //cout<<cc->InputTimestamp()<<"!\n";
     cc->Outputs()
         .Tag("NORM_LANDMARKS")
-        .Add(output_norm_landmarks.release(), cc->InputTimestamp());
+        .AddPacket(MakePacket<NormalizedLandmarkList>(output_norm_landmarks)
+                       .At(cc->InputTimestamp()));
   }
+
   // Output absolute landmarks.
   if (cc->Outputs().HasTag("LANDMARKS")) {
     cc->Outputs()
         .Tag("LANDMARKS")
-        .Add(output_landmarks.release(), cc->InputTimestamp());
+        .AddPacket(MakePacket<LandmarkList>(output_landmarks)
+                       .At(cc->InputTimestamp()));
   }
 
   return ::mediapipe::OkStatus();
@@ -241,4 +240,5 @@ REGISTER_CALCULATOR(TfLiteTensorsToLandmarksCalculator);
   num_landmarks_ = options_.num_landmarks();
 
   return ::mediapipe::OkStatus();
-}}  // namespace mediapipe
+}
+}  // namespace mediapipe
