@@ -81,7 +81,7 @@ output_data
 │   ├── IMG_2734.mp4
 │   ├── IMG_2735.mp4
 │   └── IMG_2736.mp4
-└── Apple
+└── Bird
     ├── IMG_2472.txt
     ├── IMG_2473.txt
     ├── IMG_2474.txt
