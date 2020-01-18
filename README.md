@@ -49,8 +49,7 @@ To make mp4 file and txt file with mediapipe automatically, run
 ```
 inside mediapipe directory. 
 
-Change INPUT_PATH, OUTPUT_PATH to your own folder directory path. INPUT_PATH is path to your input videos. OUTPUT_PATH is where all the hand-tracked mp4 files and txt files of 42 landmarks are saved.
-
+All the hand-tracked mp4 files and txt files with 42 landmarks are saved in the output_data_path folder.
 (example: python build.py --input_data_path=/Users/anna/SLR/input_video/ --output_data_path=/Users/anna/SLR/output_video/)
 
 For example:
