@@ -39,7 +39,7 @@ to our new demo_run_graph_main.cc file in the modified_mediapipe folder.
 ```
 to our new landmarks_to_render_data_calculator.cc file in the modified_mediapipe folder.
 
-### 2. Create you own training data
+### 2. Create your own training data
 Make **train_videos** and **test_videos** for each sign language word in one folder. Copy **build.by** file in util folder to your mediapipe directory. (Currently there may be a TabError. You may need to change the tab manually.)
 * Usage
 
