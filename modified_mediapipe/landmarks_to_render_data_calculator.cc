@@ -291,7 +291,7 @@ REGISTER_CALCULATOR(LandmarksToRenderDataCalculator);
       landmark_data->set_normalized(true);
       landmark_data->set_x(landmark.x());
       landmark_data->set_y(landmark.y());
-      //=========================================================//
+
       if(size_argc==4){
         ofstream out(str,ios_base::out | ios_base::app);
         if(pcond==false){
