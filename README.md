@@ -18,7 +18,7 @@ Gesture recognition with deep learning model can be done with only **42 hand lan
   git clone https://github.com/google/mediapipe.git
 ```
 See the rest of installation documents [here](https://mediapipe.readthedocs.io/en/latest/install.html).
-* Change **/end_loop_calculator.h** file
+* Change **end_loop_calculator.h** file
 ```shell
   cd ~/mediapipe/mediapipe/calculators/core
   rm end_loop_calculator.h
