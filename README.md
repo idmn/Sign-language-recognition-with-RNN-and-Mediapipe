@@ -47,9 +47,11 @@ To make mp4 file and txt file with mediapipe automatically, run
 ```shell
   python build.py --input_data_path=[INPUT_PATH] --output_data_path=[OUTPUT_PATH]
 ```
-inside mediapipe directory. (example: python build.py --input_data_path=/Users/anna/SLR/input_video/ --output_data_path=/Users/anna/SLR/output_video/)
+inside mediapipe directory. 
 
-Change INPUT_PATH, OUTPUT_PATH to your own folder directory path. INPUT_PATH is path to your input videos. OUTPUT_PATH is where all the hand-tracked mp4 files and txt files of 42 landmarks will be saved.
+Change INPUT_PATH, OUTPUT_PATH to your own folder directory path. INPUT_PATH is path to your input videos. OUTPUT_PATH is where all the hand-tracked mp4 files and txt files of 42 landmarks are saved.
+
+(example: python build.py --input_data_path=/Users/anna/SLR/input_video/ --output_data_path=/Users/anna/SLR/output_video/)
 
 For example:
 ```shell
