@@ -47,8 +47,9 @@ To make mp4 file and txt file with mediapipe automatically, run
 ```shell
   python build.py --input_data_path=[INPUT_PATH] --output_data_path=[OUTPUT_PATH]
 ```
-inside mediapipe directory. 
-[INPUT_PATH] example: /Users/anna/SLR/input_video/ 
+inside mediapipe directory.
+
+(path example: /Users/anna/SLR/input_video/ )
 
 For example:
 ```shell
