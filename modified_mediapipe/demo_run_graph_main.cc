@@ -13,6 +13,7 @@
 // limitations under the License.
 //
 // An example of sending OpenCV webcam frames into a MediaPipe graph.
+// Modifications copyright (C) 2020 <Argo/jongwook>
 
 #include "mediapipe/framework/calculator_framework.h"
 #include "mediapipe/framework/formats/image_frame.h"
@@ -24,9 +25,6 @@
 #include "mediapipe/framework/port/opencv_video_inc.h"
 #include "mediapipe/framework/port/parse_text_proto.h"
 #include "mediapipe/framework/port/status.h"
-
-//Modified part of mediapipe code 
-//===============================================
 #include <vector>
 using namespace std;
 
@@ -36,8 +34,6 @@ int size_argc=0;
 int condition_code=0;
 vector<pair<float,float>> posl(21);
 bool pcond=0;
-//================================================
-
 
 constexpr char kInputStream[] = "input_video";
 constexpr char kOutputStream[] = "output_video";
@@ -155,15 +151,12 @@ DEFINE_string(output_video_path, "",
 int main(int argc, char** argv) {
   google::InitGoogleLogging(argv[0]);
    
-  //save input and output file path name
-  //================================================
-  size_argc=argc;
+  size_argc=argc; //save input and output file path name
   if(argc==4){  
       input_video_new = argv[argc-2];
       output_video_new = argv[argc-1];
   }
-  //================================================
-    
+  
   gflags::ParseCommandLineFlags(&argc, &argv, true);
   ::mediapipe::Status run_status = RunMPPGraph();
   if (!run_status.ok()) {
