@@ -90,9 +90,9 @@ output_data
 ```
 (DO NOT use space bar or '_' to your folder path and video name ex) Apple_pie (X))
 
-Our ASL word example
+Our ASL word example:
 
-| word   | word  | word | word |
+| word   |   |  |  |
 |:------:|:------:|:------:|:------:|
 |Apple|Bird|Blue|Cents|
 |Child|Cow|Drink|Green|
