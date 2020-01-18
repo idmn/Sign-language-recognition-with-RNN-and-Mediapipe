@@ -92,7 +92,7 @@ output_data
 
 Our ASL word example:
 
-| word   | word  | word | word |
+| word | word | word | word |
 |:------:|:------:|:------:|:------:|
 |Apple|Bird|Blue|Cents|
 |Child|Cow|Drink|Green|
