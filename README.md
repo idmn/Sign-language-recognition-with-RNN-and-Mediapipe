@@ -92,7 +92,7 @@ output_data
 
 Our ASL word example
 
-| column | column | column | 
+
 |:-------|-------:|:------:|
 |   a    |   b    |   c    |
 
