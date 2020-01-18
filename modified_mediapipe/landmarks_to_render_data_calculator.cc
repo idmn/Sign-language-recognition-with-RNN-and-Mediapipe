@@ -1,4 +1,5 @@
 // Copyright 2019 The MediaPipe Authors.
+// Modifications copyright (C) 2020 <Argo/jongwook>
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,24 +24,18 @@
 #include "mediapipe/framework/port/ret_check.h"
 #include "mediapipe/util/color.pb.h"
 #include "mediapipe/util/render_data.pb.h"
-
-//Edit your mediapipe code because of using input_path&output_path 
-//=========================================================//
-
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <vector>//may use calculate landmarks pos(prev,cur)
+#include <vector>
 using namespace std;
-extern string input_video_new;
+extern string input_video_new; //input_path and output_path 
 extern string output_video_new;
 extern int size_argc;
 extern int condition_code;
 static int con_idx2;
 extern vector<pair<float,float>> posl;
 extern bool pcond;
-//=========================================================//
-
 
 namespace mediapipe {
 
@@ -233,27 +228,25 @@ REGISTER_CALCULATOR(LandmarksToRenderDataCalculator);
     // Only change rendering if there are actually z values other than 0.
     visualize_depth &= ((z_max - z_min) > 1e-3);
     
-    //=========================================================//
-    //Edit your code
-    //To get video name from input_file path
+    //get video name from input_file path
     string str="";
     if(size_argc==4){
     	string video_fname="";
     	bool isTrue=false;
     	int slx;
-    	//To locate the video file name in the input path
+    	//locate the video file name in the input path
     	for(slx=input_video_new.size()-1;input_video_new[slx]!='/';slx--){
         	if(isTrue)
             		video_fname=input_video_new[slx]+video_fname;
         	if(input_video_new[slx]=='.') isTrue=true;
     	}
     	slx--;
-    	//To get directory name that store text file from input_file path
+    	//get directory name that store text file from input_file path
     	string dir_name="/";      
    	for(;input_video_new[slx]!='/';slx--){
         	dir_name=input_video_new[slx]+dir_name;
     	}
-    	//아웃풋 파일의 경로의 일부를 저장하는 변수
+    	
     	//parameter that store a part of output_file path
     	string output_path_cp="";
     	int j=0;
@@ -268,7 +261,7 @@ REGISTER_CALCULATOR(LandmarksToRenderDataCalculator);
     	//output file open
     	//ofstream out(str,std::ios_base::out | std::ios_base::app);
     }
-      //=========================================================//
+
     if(size_argc==4&&condition_code==1&&con_idx2==1){
         ofstream slt(str,ios_base::out | ios_base::app);
         for(int i=0;i<landmarks.landmark_size(); ++i){
@@ -284,8 +277,7 @@ REGISTER_CALCULATOR(LandmarksToRenderDataCalculator);
     else if(condition_code==1){
         con_idx2=1;
     }
-    //=========================================================//
-    //=========================================================//
+
     for (int i = 0; i < landmarks.landmark_size(); ++i) {
         
       const NormalizedLandmark& landmark = landmarks.landmark(i);
@@ -315,12 +307,10 @@ REGISTER_CALCULATOR(LandmarksToRenderDataCalculator);
       }
       posl[i].first=static_cast<float>(landmark.x());
       posl[i].second=static_cast<float>(landmark.y());
-
-      //=========================================================//
     }
-    //=========================================================//
+   
     pcond=true;
-    //=========================================================//
+  
     if (visualize_depth) {
       AddConnectionsWithDepth<NormalizedLandmarkList>(
           landmarks, /*normalized=*/true, z_min, z_max, render_data.get());
@@ -335,7 +325,7 @@ REGISTER_CALCULATOR(LandmarksToRenderDataCalculator);
       .Add(render_data.release(), cc->InputTimestamp());
   return ::mediapipe::OkStatus();
 }
-/*===================================================================*/
+
 template <class LandmarkListType>
 void LandmarksToRenderDataCalculator::AddConnectionsWithDepth(
     const LandmarkListType& landmarks, bool normalized, float min_z,
