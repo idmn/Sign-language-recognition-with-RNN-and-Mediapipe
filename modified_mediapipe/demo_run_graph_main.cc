@@ -24,19 +24,19 @@
 #include "mediapipe/framework/port/opencv_video_inc.h"
 #include "mediapipe/framework/port/parse_text_proto.h"
 #include "mediapipe/framework/port/status.h"
-//Edit your mediapipe code
-//input file path & output file path
-//================================================//
+
+//Modified part of mediapipe code 
+//===============================================
 #include <vector>
 using namespace std;
 
-string input_video_new="";
+string input_video_new=""; //input file path & output file path
 string output_video_new="";
 int size_argc=0;
 int condition_code=0;
 vector<pair<float,float>> posl(21);
 bool pcond=0;
-//================================================//
+//================================================
 
 
 constexpr char kInputStream[] = "input_video";
@@ -154,16 +154,15 @@ DEFINE_string(output_video_path, "",
 
 int main(int argc, char** argv) {
   google::InitGoogleLogging(argv[0]);
-  //cout<<argc<<endl;
-    
-  //Edit your mediapipe code
-  //================================================//
+   
+  //save input and output file path name
+  //================================================
   size_argc=argc;
   if(argc==4){  
       input_video_new = argv[argc-2];
       output_video_new = argv[argc-1];
   }
-  //================================================//
+  //================================================
     
   gflags::ParseCommandLineFlags(&argc, &argv, true);
   ::mediapipe::Status run_status = RunMPPGraph();
