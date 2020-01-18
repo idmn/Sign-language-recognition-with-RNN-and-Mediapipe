@@ -92,17 +92,17 @@ output_data
 
 Our ASL word example
 
-
-|:-------|-------:|:------:|
-|   a    |   b    |   c    |
-
-
-
+| word | word | word | word |
+|:------:|:------:|:------:|
 |Apple|Bird|Blue|Cents|
 |Child|Cow|Drink|Green|
 |Hello|Like|Metoo|No|
 |Orange|Sorry|Thankyou|Where|
-|Who|Yes|You|
+|Who|Yes|You|   |
+
+
+
+
 
 
 ### 3. Train RNN model
