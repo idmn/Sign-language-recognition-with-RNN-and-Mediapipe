@@ -83,9 +83,10 @@ def load_label():
     
 def main(input_data_path,output_data_path):
     comp='bazel build -c opt --define MEDIAPIPE_DISABLE_GPU=1 \
-            mediapipe/examples/desktop/hand_tracking:hand_tracking_cpu'
+    mediapipe/examples/desktop/multi_hand_tracking:multi_hand_tracking_cpu'
     #명령어 컴파일
-    cmd='GLOG_logtostderr=1 bazel-bin/mediapipe/examples/desktop/hand_tracking/hand_tracking_cpu  --calculator_graph_config_file=mediapipe/graphs/hand_tracking/hand_tracking_desktop_live.pbtxt'
+    cmd='GLOG_logtostderr=1 bazel-bin/mediapipe/examples/desktop/multi_hand_tracking/multi_hand_tracking_cpu \
+    --calculator_graph_config_file=mediapipe/graphs/hand_tracking/multi_hand_tracking_desktop_live.pbtxt'
     #미디어 파이프 명령어 저장
     listfile=os.listdir(input_data_path)
     output_dir=""
