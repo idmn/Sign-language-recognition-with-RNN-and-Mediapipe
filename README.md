@@ -1,5 +1,5 @@
 # Sign language recognition with RNN and Mediapipe 
-## based on multi hand tracking
+## with multi hand tracking
 Sign language gesture recognition using a reccurent neural network(RNN) with Mediapipe hand tracking. 
 
 This project is for academic purpose. Thank you for Google's Mediapipe team :)
