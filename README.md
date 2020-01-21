@@ -4,7 +4,7 @@ Sign language gesture recognition using a reccurent neural network(RNN) with Med
 
 This project is for academic purpose. Thank you for Google's Mediapipe team :)
 
-## Data Preprocessing with hand tracking(Desktop)
+## Data Preprocessing with multi hand tracking(macOS, CPU)
 Create training data on Desktop with input video using [Multi Hand Tracking](https://github.com/google/mediapipe/blob/master/mediapipe/docs/multi_hand_tracking_mobile_gpu.md).
 Gesture recognition with deep learning model can be done with only **42 hand landmarks** RNN training per frame.
 
@@ -115,6 +115,7 @@ Add path to preprocessed pkl file into PKL_FILE.
 
 Watch [this video](https://www.youtube.com/watch?v=5epWNiv5EKk&t=77s) for the overall workflow.
 [more details](https://www.slideshare.net/JiHyunKim204)
+
 
 
 
