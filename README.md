@@ -49,11 +49,14 @@ To make mp4 file and txt file with mediapipe automatically, run
 ```
 inside mediapipe directory.
 
+IMPORTANT: Name the folder carefully as the folder name will be the label itself for the video data.
+(DO NOT use space bar or '_' to your video name ex) Apple_pie (X))
+
 (path example: /Users/anna/SLR/input_video/ )
 
 For example:
 ```shell
-input_videos
+input_video
 ├── Apple
 │   ├── IMG_2733.MOV
 │   ├── IMG_2734.MOV
@@ -88,7 +91,6 @@ output_data
     └── IMG_2475.txt
     ...
 ```
-(DO NOT use space bar or '_' to your folder path and video name ex) Apple_pie (X))
 
 Our ASL word example:
 
